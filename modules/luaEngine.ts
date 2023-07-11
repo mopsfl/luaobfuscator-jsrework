@@ -61,12 +61,7 @@ export default class LuaEngine {
 
     getSessionUrl() {
         this.sessionId = new URLSearchParams(window.location.search).get("session");
-        //this.setFakeUrl()
         return this.sessionId
-    }
-
-    setFakeUrl(url: string = "") {
-        window.history.replaceState({}, document.title, `/${url}`);
     }
 
     setSessionUrl() {
