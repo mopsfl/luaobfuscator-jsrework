@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>LuaObfuscator - Playground</title>
+        <style>
+            html {
+                /* Only here so we don't get a bright white flash while page loads! */
+                background-color: #1e1e1e;
+                color: lightblue;
+            }
+        </style>
+        <link rel="stylesheet" href="dist/css/style.css" type="text/css">
+        <script type="module" src="/dist/js/index.js" defer></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content="Explore a collection of Lua obfuscation and deobfuscation techniques from the comfort of the cloud. Featuring a beautifier, minification, string encryption, control flow obfuscation and virtualization."/>
+        <meta name="keywords" content="Online Lua Obfuscation, Lua Beautifier, Lua Minifier, Lua Obfuscator, Lua deobfuscator, obfuscator, lua, deobfuscation, roblox obfuscator, roblox protection, packer, crypter, lua emulator"/>
+        <meta property="og:title" content="Online Lua Obfuscator"/>
+        <meta property="og:image" content="/img/logo.png">
+        <meta property="og:description" content="Explore a collection of Lua obfuscation and deobfuscation techniques from the comfort of the cloud. Featuring a beautifier, minification, string encryption, control flow obfuscation and virtualization."/>
+        <meta property="og:url" content="https://luaobfuscator.com"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=VT323&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="main-container" style="height: 100% !important">
+            <div class="notepad-body">
+                <div id="home-landing" class="notepad-test">
+                    <div class="notepad-script" style="display:block;">
+                        <article id="home-landingpage" class="content-landing">
+                            <div class="home-page-content" style="background: #252525; border-radius: 0% 0% 50% 50% / 10%">
+                                <a class="home-ribbon" href="https://github.com/sponsors/ferib">Donate on GitHub 🥰</a>
+                                <div class="home-page-container">
+                                    <div class="home-page-row">
+                                        <div class="home-info">
+                                            <h1>Protect your Lua Scripts Today!
+                                                <span>😎</span>
+                                            </h1>
+                                            <p>You are 2 clicks away from obfuscating your Lua Script! Use the action buttons on the right to select from a wide range of obfuscation features after clicking Upload File or Demo.</p>
+                                            <div class="button-box">
+                                                <div id="btn-demo" class="big-pink-btn">Demo</div>
+                                                <div id="btn-uploadfile" class="big-pink-btn-light">Upload File</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="home-page-content" style="padding-bottom: 0">
+                                <div class="home-page-container">
+                                    <div class="home-page-row">
+                                        <div class="home-info">
+                                            <h2 style="color:var(--primary)">Join the community!</h2>
+                                            <p>Our beloved Discord server may be a thing of the past, but fear not, for we have created a new haven for unrestricted conversation and free expression!</p>
+                                            <div class="button-box" style="justify-content: flex-start;">
+                                                <div id="fire-container"></div>
+                                                <a href="https://discord.gg/vYrmxByrWq">
+                                                    <div class="big-pink-btn" style="margin-right: 10px; box-shadow: 2px 2px 5px 2px red; color:red;">Discord 🚀</div>
+                                                </a>
+                                                <a href="/forum/">
+                                                    <div class="big-pink-btn-light">Visit Community</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        <footer class="home-footer">
+                            <div style="padding: 12px; opacity: 0.2">
+                                <span>Copyrighted 2022-2023</span>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+                <div id="home-ide" class="notepad-test" style="display: none; /* default not shown? */">
+                    <div class="notepad-top">
+                        <ul id="lua-sessions"></ul>
+                        <ul id="lua-top-mobile">
+                            <li style="display: block;height: 100%;padding: 5px;">
+                                <div style="position: absolute;display: block;width: 32px;height: 32px;background-color: #252525;border-radius: 12px;padding: 2px;">
+                                    <a href="/" style="position: absolute;">
+                                        <img style="width: 32px; height: 32px; display: inline-block; filter: drop-shadow(1px 1px 3px black);" alt="LuaObfuscator logo" src="https://luaobfuscator.com/img/logo.png" width="600" height="600"/>
+                                    </a>
+                                </div>
+                                <span style="color: var(--white); margin-left: 42px; margin-top: 5px; position: absolute;">
+                                    - LuaObfuscator</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="notepad-script">
+                        <div id="toolbox-download-btn" class="big-pink-btn">Download</div>
+                        <div class="notepad-lines">
+                            <ul id="notepad-lines-ul"></ul>
+                        </div>
+                        <pre class="lasm-script"><code id="lua-codewindow" class="lang-lua" contenteditable="false" spellcheck="false" style="filter: blur(10px);"></code></pre>
+                        <input type="file" id="lua-file" style="display:none"/>
+                    </div>
+                </div>
+                <div id="notepad-toolbox1" class="notepad-toolbox">
+                    <a style="text-decoration: none;" href="/forum">
+                        <div class="toolbox-collapsible collapsible-header">Community</div>
+                    </a>
+                    <div style="display: none; height: auto; width: 100%;"></div>
+                    <div class="toolbox-collapsible">All Actions</div>
+                    <div style="display: none; height: auto; width: 100%;">
+                        <span id="lua-cleanup" class="toolbox-button" style="background-color: red;">CLEANUP</span>
+                        <span id="lua-junkif" class="toolbox-button" style="background-color: lightskyblue;">Junk-If</span>
+                        <span id="lua-reverseif" class="toolbox-button" style="background-color: lightskyblue;">Reverse-If</span>
+                        <span id="lua-cffv1" class="toolbox-button" style="background-color: lightskyblue;">CFF v1*</span>
+                        <span id="lua-literals" class="toolbox-button" style="background-color: lightskyblue;">Literals</span>
+                        <span id="lua-mbav1" class="toolbox-button" style="background-color: lightskyblue;">MBAv1</span>
+                        <span id="lua-strings" class="toolbox-button" style="background-color: lightskyblue;">Strings</span>
+                        <span id="lua-tableindirection" class="toolbox-button" style="background-color: lightskyblue;">Table Indirection</span>
+                        <span id="lua-minify" class="toolbox-button" style="background-color: lightskyblue;">Minify*</span>
+                        <span id="lua-beautify" class="toolbox-button" style="background-color: lightskyblue;">Beautify</span>
+                        <span id="lua-demo_vm" class="toolbox-button" style="background-color: rgb(46, 162, 235);">Demo VM*</span>
+                        <span id="lua-reset" class="toolbox-button" style="background-color: yellowgreen;">RESET&nbsp;</span>
+                        <p style="color: indianred; bottom:0px">*Experimental</p>
+                    </div>
+                    <div class="toolbox-collapsible toolbox-hit">Obfuscation</div>
+                    <div style="display: block; height: auto; width: 100%;">
+                        <span id="lua-pre-1" class="toolbox-button" style="background-color: orangered;">Chaotic Evil</span>
+                        <span id="lua-pre-2" class="toolbox-button" style="background-color: orange;">Chaotic Good</span>
+                        <span id="lua-pre-5" class="toolbox-button" style="font-size: 25px; font-weight: 700; color: darkred; background-color: yellowgreen;">&nbsp;> OBFUSCATE! &lt;</span>
+                        <span id="lua-pre-3" class="toolbox-button" style="background-color: greenyellow;">Basic Good</span>
+                        <span id="lua-pre-4" class="toolbox-button" style="background-color: lightgreen;">Basic Minimal
+                        </span>
+                        <span id="lua-beautify3" class="toolbox-button" style="background-color: lightskyblue;">Beautify</span>
+                    </div>
+                    <div class="toolbox-collapsible">Miscellaneous</div>
+                    <div style="display: none; height: auto; width: 100%;">
+                        <span id="lua-copytoclipboard" class="toolbox-button" style="background-color: lightskyblue;">Copy to clipboard</span>
+                        <span id="lua-beautify2" class="toolbox-button" style="background-color: lightskyblue;">Beautify</span>
+                        <span id="lua-minify2" class="toolbox-button" style="background-color: lightskyblue;">Minify</span>
+                        <span id="lua-undo" class="toolbox-button" style="background-color: mediumpurple;">Undo</span>
+                        <span id="lua-undoAll" class="toolbox-button" style="background-color: mediumpurple;">Undo ALL</span>
+                        <span id="lua-reset2" class="toolbox-button" style="background-color: yellowgreen;">RESET&nbsp;</span>
+                    </div>
+                    <div class="toolbox-collapsible">De-obfuscation</div>
+                    <div style="display: none; height: auto; width: 100%;">
+                        <span id="lua-cleanup3" class="toolbox-button" style="background-color: red;">CLEANUP</span>
+                    </div>
+                    <div class="toolbox-collapsible" style="color: #ff6969!important">Experimental</div>
+                    <div style="display: none; height: auto; width: 100%;">
+                        <span id="lua-variables" class="toolbox-button" style="background-color: lightskyblue;">Locals**</span>
+                        <span id="lua-cffv1-exp" class="toolbox-button" style="background-color: lightskyblue;">CFF v1*</span>
+                        <span id="lua-ssa" class="toolbox-button" style="background-color: lightskyblue;">SSA-ish</span>
+                        <span id="lua-demo_vm-exp" class="toolbox-button" style="background-color: rgb(46, 162, 235);">Demo VM*</span>
+                        <p style="color: indianred; bottom:0px">*Might break</p>
+                        <p style="color: indianred; bottom:0px">**Will break</p>
+                    </div>
+                    <div class="toolbox-collapsible toolbox-stats">
+                        <span style="font-size: 26px; line-height: 30px;">
+                            <svg width="30px" height="30px" viewbox="-9.66 0 103.8 103.8" xmlns="http://www.w3.org/2000/svg">
+                                <g id="Group_2" data-name="Group 2" transform="translate(-472 -231.9)">
+                                    <path id="Path_47" data-name="Path 47" d="M522.1,246.8H499.3c-11.6,0-21.1,7.6-21.1,15.2" fill="none" stroke="#90ee90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+                                    <line id="Line_22" data-name="Line 22" y1="22.7" transform="translate(551 255.1)" fill="none" stroke="#90ee90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+                                    <path id="Path_48" data-name="Path 48" d="M532.6,233.9H509.8c-11.6,0-21.1,6.7-21.1,15" fill="none" stroke="#90ee90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+                                    <path id="Path_49" data-name="Path 49" d="M534.7,256.7H490.3A16.3,16.3,0,0,0,474,273v44.4a16.3,16.3,0,0,0,16.3,16.3h44.4A16.3,16.3,0,0,0,551,317.4V273A16.3,16.3,0,0,0,534.7,256.7Z" fill="none" stroke="#90ee90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+                                    <path id="Path_50" data-name="Path 50" d="M540.7,242.3a3.567,3.567,0,0,1,4.2,4.2,3.518,3.518,0,0,1-2.8,2.8,3.567,3.567,0,0,1-4.2-4.2A3.518,3.518,0,0,1,540.7,242.3Z" fill="#90ee90" stroke="#90ee90" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+                                    <path id="Path_51" data-name="Path 51" d="M551.2,233.5a3.567,3.567,0,0,1,4.2,4.2,3.518,3.518,0,0,1-2.8,2.8,3.567,3.567,0,0,1-4.2-4.2A3.651,3.651,0,0,1,551.2,233.5Z" fill="#90ee90" stroke="#90ee90" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+                                    <line id="Line_23" data-name="Line 23" x2="23.1" transform="translate(491.1 278.8)" fill="none" stroke="#90ee90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+                                    <line id="Line_24" data-name="Line 24" x2="36.1" transform="translate(491.1 295.2)" fill="none" stroke="#90ee90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+                                </g>
+                            </svg>
+                            237317
+                        </span>
+                    </div>
+                    <div style="display: none; height: auto; width: 100%;">
+                        <span style="color: lightgreen; font-style: italic;">Total Downloads: 237317</span><br/>
+                        <span style="color: lightgreen; font-style: italic;">Total Obfuscations: 560772</span>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function (event) {
+                    let fireContainer = document.getElementById("fire-container");
+                    function createParticles(fireContainer, num, leftSpacing) {
+                        for (let i = 0; i < num; i += 1) {
+                            let particle = document.createElement("div");
+                            particle.style.left = `calc((100% - 5em) * ${
+                                i / leftSpacing
+                            })`;
+                            particle.setAttribute("class", "particle");
+                            particle.style.animationDelay = 4 * Math.random() + "s";
+                            fireContainer.appendChild(particle);
+                        }
+                    }
+                    createParticles(fireContainer, 90, 60);
+                });
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "module": "es2022",
+      "outDir": "./dist/chunks/js",
+      "esModuleInterop": true,
+      "paths": {
+        "lodash": ["/static/js/lodash.min.js"],
+      }
+    },
+    "exclude": ["node_modules"]
+}

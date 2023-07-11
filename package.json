@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "@types/lodash": "^4.14.195",
+    "esbuild": "^0.18.11",
+    "lodash": "^4.17.21",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "bundle": "esbuild ./dist/chunks/js/index.js style.css --bundle --minify --platform=browser --outdir=./dist --format=esm --allow-overwrite --splitting --entry-names=[ext]/[name]",
+    "bundledev": "esbuild index.ts style.css --bundle --platform=browser --outdir=./dist --format=esm --allow-overwrite --splitting --entry-names=[ext]/[name] --watch",
+    "build": "rimraf dist && npx tsc && npm run bundle",
+    "dev": "rimraf dist && npm run bundledev"
+  }
+}
