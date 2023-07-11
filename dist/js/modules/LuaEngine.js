@@ -14,8 +14,9 @@ export default class LuaEngine {
     isQueued;
     callback;
     lines;
+    instances;
     endpoints;
-    constructor(apiUrl = "https://luaobfuscator.com/api/ide/", sessionId = null, tokens = [], lineCount = 0, lastEvent = 0, lastEdit = 0, lastApiTry = null, lastScript = null, isQueued = false, callback = null, lines = null, endpoints = {
+    constructor(apiUrl = "https://luaobfuscator.com/api/ide/", sessionId = null, tokens = [], lineCount = 0, lastEvent = 0, lastEdit = 0, lastApiTry = null, lastScript = null, isQueued = false, callback = null, lines = null, instances = null, endpoints = {
         session: "?session=",
         initf: "init?f=",
         obfuscateAll: "obfuscateAll/",
@@ -34,12 +35,14 @@ export default class LuaEngine {
         this.isQueued = isQueued;
         this.callback = callback;
         this.lines = lines;
+        this.instances = instances;
         this.endpoints = endpoints;
     }
     init(callback, flags = 0, force = false, content = "") {
         this.lineCount = 0;
         this.lastEdit = 0;
         this.lastEvent = 0;
+        this.instances = null;
         this.tokens = [];
         this.callback = callback;
         this.getSessionUrl();
@@ -64,7 +67,11 @@ export default class LuaEngine {
     getSessionId() { return this.sessionId; }
     getSessionUrl() {
         this.sessionId = new URLSearchParams(window.location.search).get("session");
+        this.setFakeUrl();
         return this.sessionId;
+    }
+    setFakeUrl(url = "") {
+        window.history.replaceState({}, document.title, `/${url}`);
     }
     setSessionUrl() {
         const url = new URLSearchParams(window.location.search);
@@ -84,7 +91,8 @@ export default class LuaEngine {
             const script = res;
             this.tokens = script.tokens;
             if (!_.isNull(script.message)) {
-                alert(script.message); //custom error handler soon
+                if (!_.isNull(script.message))
+                    self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
                 if (_.isFunction(callback))
                     callback(-1);
                 return;
@@ -157,8 +165,8 @@ export default class LuaEngine {
         }).then(res => {
             const script = res;
             this.tokens = script.tokens;
-            if (script.message != null)
-                alert(script.message); //custom error handler soon
+            if (!_.isNull(script.message))
+                self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
             if (_.isFunction(callback))
                 callback(tick);
         }).catch(err => {
@@ -177,7 +185,7 @@ export default class LuaEngine {
             const script = res;
             this.tokens = script.tokens;
             if (!_.isNull(script.message))
-                alert(script.message); //custom error handler soon
+                self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
             if (_.isFunction(callback))
                 callback(-1);
         }).catch(err => {
@@ -196,7 +204,7 @@ export default class LuaEngine {
             const script = res;
             this.tokens = script.tokens;
             if (!_.isNull(script.message))
-                alert(script.message); //custom error handler soon
+                self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
             if (_.isFunction(callback))
                 callback(-1);
         }).catch(err => {
@@ -204,14 +212,17 @@ export default class LuaEngine {
             console.error(`Error: ${error.statusText} (${error.status})`);
         });
     }
-    getInstances(callback) {
-        self.$.ajax({
-            url: `${this.apiUrl}/${this.endpoints.sessions}`,
+    async getInstances() {
+        await self.$.ajax({
+            url: `${this.apiUrl}${this.endpoints.sessions}`,
             method: "GET"
-        }).then(res => callback(res)).catch(err => {
+        }).then(res => {
+            this.instances = res;
+        }).catch(err => {
             const error = err;
             console.error(`Error: ${error.statusText} (${error.status})`);
         });
+        return this.instances;
     }
     cleanUp(callback) {
         self.$.ajax({
@@ -224,7 +235,7 @@ export default class LuaEngine {
             const script = res;
             this.tokens = script.tokens;
             if (!_.isNull(script.message))
-                alert(script.message); //custom error handler soon
+                self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
             if (_.isFunction(callback))
                 callback(-1);
         }).catch(err => {

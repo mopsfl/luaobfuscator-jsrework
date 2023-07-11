@@ -7,6 +7,7 @@ export default class Elements {
         public ide: HTMLElement = document.querySelector("#home-ide"),
         public toolbox: HTMLElement = document.querySelector("#notepad-toolbox1"),
         public btn_uploadfile: HTMLElement = document.querySelector("#btn-uploadfile"),
-        public lua_file: HTMLElement = document.querySelector("#lua-file")
+        public lua_file: HTMLElement = document.querySelector("#lua-file"),
+        public lua_sessions: HTMLElement = document.querySelector("#lua-sessions")
     ) { }
 }

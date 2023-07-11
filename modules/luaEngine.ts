@@ -1,7 +1,6 @@
 import Misc from "./Misc"
 import * as self from "../index"
 import * as _ from "lodash"
-import { error } from "jquery"
 
 const misc = new Misc()
 
@@ -18,6 +17,7 @@ export default class LuaEngine {
         public isQueued: boolean = false,
         public callback: Function = null,
         public lines: any = null,
+        public instances: Array<string> = null,
 
         public endpoints = {
             session: "?session=",
@@ -34,6 +34,7 @@ export default class LuaEngine {
         this.lineCount = 0
         this.lastEdit = 0
         this.lastEvent = 0
+        this.instances = null
         this.tokens = []
         this.callback = callback
 
@@ -60,7 +61,12 @@ export default class LuaEngine {
 
     getSessionUrl() {
         this.sessionId = new URLSearchParams(window.location.search).get("session");
+        this.setFakeUrl()
         return this.sessionId
+    }
+
+    setFakeUrl(url: string = "") {
+        window.history.replaceState({}, document.title, `/${url}`);
     }
 
     setSessionUrl() {
@@ -83,7 +89,7 @@ export default class LuaEngine {
             const script: Script = res
             this.tokens = script.tokens
             if (!_.isNull(script.message)) {
-                alert(script.message) //custom error handler soon
+                if (!_.isNull(script.message)) self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } })
                 if (_.isFunction(callback)) callback(-1)
                 return;
             }
@@ -155,7 +161,7 @@ export default class LuaEngine {
         }).then(res => {
             const script: Script = res
             this.tokens = script.tokens
-            if (script.message != null) alert(script.message)  //custom error handler soon
+            if (!_.isNull(script.message)) self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } })
             if (_.isFunction(callback)) callback(tick)
         }).catch(err => {
             const error: ajaxError = err
@@ -173,7 +179,7 @@ export default class LuaEngine {
         }).then(res => {
             const script: Script = res
             this.tokens = script.tokens
-            if (!_.isNull(script.message)) alert(script.message)  //custom error handler soon
+            if (!_.isNull(script.message)) self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } })
             if (_.isFunction(callback)) callback(-1)
         }).catch(err => {
             const error: ajaxError = err
@@ -191,7 +197,7 @@ export default class LuaEngine {
         }).then(res => {
             const script: Script = res
             this.tokens = script.tokens
-            if (!_.isNull(script.message)) alert(script.message) //custom error handler soon
+            if (!_.isNull(script.message)) self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } })
             if (_.isFunction(callback)) callback(-1)
         }).catch(err => {
             const error: ajaxError = err
@@ -199,14 +205,18 @@ export default class LuaEngine {
         })
     }
 
-    getInstances(callback: Function) {
-        self.$.ajax({
-            url: `${this.apiUrl}/${this.endpoints.sessions}`,
+    async getInstances(): Promise<any> {
+        await self.$.ajax({
+            url: `${this.apiUrl}${this.endpoints.sessions}`,
             method: "GET"
-        }).then(res => callback(res)).catch(err => {
+        }).then(res => {
+            this.instances = res
+        }).catch(err => {
             const error: ajaxError = err
             console.error(`Error: ${error.statusText} (${error.status})`)
         })
+
+        return this.instances
     }
 
     cleanUp(callback: Function) {
@@ -219,7 +229,7 @@ export default class LuaEngine {
         }).then(res => {
             const script: Script = res
             this.tokens = script.tokens
-            if (!_.isNull(script.message)) alert(script.message) //custom error handler soon
+            if (!_.isNull(script.message)) self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } })
             if (_.isFunction(callback)) callback(-1)
         }).catch(err => {
             const error: ajaxError = err

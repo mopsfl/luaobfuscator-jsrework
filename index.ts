@@ -2,6 +2,8 @@ import Elements from "./modules/Elements"
 import Buttons from "./modules/Buttons"
 import Editor from "./modules/Editor"
 import LuaEngine from "./modules/LuaEngine"
+import ErrorHandler from "./modules/ErrorHandler"
+import HeaderTabs from "./modules/HeaderTabs"
 import * as _ from "lodash"
 import $ from "jquery"
 
@@ -9,6 +11,8 @@ const elements = new Elements()
 const buttons = new Buttons()
 const editor = new Editor()
 const luaEngine = new LuaEngine()
+const errorHandler = new ErrorHandler()
+const headerTabs = new HeaderTabs()
 
 window.onload = async () => {
     window.states = {
@@ -28,6 +32,7 @@ window.onload = async () => {
     })
 
     luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1)
+    await headerTabs.Update()
 }
 
 
@@ -42,8 +47,8 @@ declare global {
 }
 
 window.modules = {
-    classes: { Elements, Buttons, Editor, LuaEngine },
-    initalized: { elements, buttons, editor, luaEngine }
+    classes: { Elements, Buttons, Editor, LuaEngine, ErrorHandler, HeaderTabs },
+    initalized: { elements, buttons, editor, luaEngine, errorHandler, headerTabs, lodash: _, jquery: $ }
 }
 
 export {
@@ -51,5 +56,7 @@ export {
     buttons,
     editor,
     luaEngine,
-    $
+    errorHandler,
+    headerTabs,
+    $, _
 }

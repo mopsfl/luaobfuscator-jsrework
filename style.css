@@ -422,8 +422,6 @@ pre>span {
     background-color: #ae81ff30 !important
 }
 
-[class^=c_ref-] {}
-
 .c_green {
     color: green
 }
@@ -497,13 +495,19 @@ pre>span {
     background-color: var(--color-background-light-2);
     color: var(--primary);
     border-radius: 10px 10px 0 0;
-    overflow: hidden
+    overflow: hidden;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .top-tab>a {
     width: 100%;
     display: block;
-    cursor: pointer !important
+    cursor: pointer !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .top-crumb {
@@ -522,7 +526,7 @@ pre>span {
 .top-tab-close {
     float: right;
     color: #cd5c5c;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .toolbox-collapsible {
@@ -558,7 +562,6 @@ pre>span {
     content: "\2212"
 }
 
-.toolbox-header {}
 
 .content-box-middle {
     padding-right: 5px;
@@ -635,8 +638,6 @@ pre>span {
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
 }
 
-.box-text {}
-
 [id^=reply-] {
     padding-left: 90px
 }
@@ -665,7 +666,6 @@ a .post-title {
     color: var(--secondary) !important
 }
 
-.post-title-interactable {}
 
 .post-title-interactable:hover {
     text-decoration: underline
