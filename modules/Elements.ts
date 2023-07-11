@@ -5,6 +5,8 @@ export default class Elements {
         public btn_demo: HTMLElement = document.querySelector("#btn-demo"),
         public codewindow: HTMLElement = document.querySelector("#lua-codewindow"),
         public ide: HTMLElement = document.querySelector("#home-ide"),
-        public toolbox: HTMLElement = document.querySelector("#notepad-toolbox1")
+        public toolbox: HTMLElement = document.querySelector("#notepad-toolbox1"),
+        public btn_uploadfile: HTMLElement = document.querySelector("#btn-uploadfile"),
+        public lua_file: HTMLElement = document.querySelector("#lua-file")
     ) { }
 }

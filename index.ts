@@ -17,25 +17,22 @@ window.onload = async () => {
     }
 
     $(elements.btn_demo).on("click", () => buttons.OpenDemo())
-    window.luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1)
+    $(elements.btn_uploadfile).on("click", () => buttons.UploadFile())
+    $(elements.lua_file).on("change", (e) => {
+        const target: any = e.target
+        const files: FileList = target.files
+        if (window.states.isObfuscating && files.length > 0) return
+
+        window.states.isObfuscating = true
+        files[0].text().then(script => luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1, true, script))
+    })
+
+    luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1)
 }
 
 
 declare global {
     interface Window {
-        luaEngine: {
-            cleanup: Function,
-            getInstances: Function,
-            getLines: Function,
-            getSessionId: Function,
-            init: Function,
-            initFromUrl: Function,
-            obfuscate: Function,
-            obfuscateToken: Function,
-            parseScript: Function,
-            updateLastTick: Function,
-            updateScript: Function,
-        },
         states: {
             isObfuscating: boolean,
             windowState: boolean,
@@ -52,5 +49,7 @@ window.modules = {
 export {
     elements,
     buttons,
-    editor
+    editor,
+    luaEngine,
+    $
 }

@@ -24,9 +24,8 @@ export default class Editor {
 
     Callback(lastEvent?: any) {
         this.StopObfuscation()
-        if (!window.luaEngine.parseScript(self.elements.codewindow, lastEvent)) return
-
-        this.ToggleWindowState(window.luaEngine.getSessionId() != null)
+        if (!self.luaEngine.parseScript(self.elements.codewindow, lastEvent)) return
+        this.ToggleWindowState(self.luaEngine.getSessionId() != null)
     }
 
     ToggleWindowState(State: boolean = window.states.windowState) {
