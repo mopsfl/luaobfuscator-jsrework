@@ -1,3 +1,6 @@
 node_modules
 package-lock.json
 temp
+bower_components/jquery/src
+bower_components/jquery/*
+!bower_components/jquery/dist
