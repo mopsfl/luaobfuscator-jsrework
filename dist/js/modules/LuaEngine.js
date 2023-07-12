@@ -52,6 +52,7 @@ export default class LuaEngine {
                 if (eventCode === null)
                     return this.resetUrl();
                 this.callback(eventCode);
+                self.headerTabs.Update();
             });
         }
         else if (force) {
@@ -204,7 +205,7 @@ export default class LuaEngine {
             const script = res;
             this.tokens = script.tokens;
             if (!_.isNull(script.message)) {
-                self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
+                self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } }, false);
                 self.editor.ToggleLoading(false);
             }
             if (_.isFunction(callback))
@@ -271,11 +272,12 @@ export default class LuaEngine {
         });
     }
     onVariableChange(event) {
-        const target = event.target, classes = target.className.split(' '), newName = target.innerHTML, spans = document.getElementsByClassName(classes[0]);
+        const target = event.target, classes = target.className.split(' '), newName = target.textContent, spans = document.getElementsByClassName(classes[0]);
         for (var i = 0; i < spans.length; i++) {
             if (spans[i] == target)
                 continue;
-            spans[i].innerHTML = newName;
+            spans[i].textContent = newName.replace(/\s+/gm, "_").replace(/[^\w \xC0-\xFF]+|\s+|^\s*$/gm, "_").trim(); // Snakecase
+            //spans[i].textContent = misc.toCamelCase(newName.trim()).replace(/[^\w \xC0-\xFF]+|\s+|^\s*$/gm, "_").replace(/\s+/gm, "_") // Camelcase
         }
     }
     parseScript(targetElement, tick) {
@@ -329,6 +331,11 @@ export default class LuaEngine {
                         addNoteClass = "c_ref-" + token.xref + " " + addNoteClass;
                         newSpan.contentEditable = "true";
                         newSpan.addEventListener("input", this.onVariableChange);
+                        newSpan.addEventListener("focusout", (e) => {
+                            const target = e.target;
+                            target.textContent = target.textContent.replace(/[^\w \xC0-\xFF]+|\s+|^\s*$/gm, "_").trim(); // Snakecase
+                            //target.textContent = misc.toCamelCase(target.textContent.trim()).replace(/[^\w \xC0-\xFF]+|\s+|^\s*$/gm, "_").replace(/\s+/gm, "_") // Camelcase
+                        });
                         var hexstr = "";
                         let date = new Date();
                         let month = date.getMonth() + 1;

@@ -1,0 +1,23 @@
+{
+  "name": "string",
+  "main": "string.js",
+  "version": "0.2.0",
+  "homepage": "https://github.com/gfarrell/string.js",
+  "authors": [
+    "Gideon Farrell <me@gideonfarrell.co.uk>"
+  ],
+  "description": "Useful String extensions in javascript",
+  "moduleType": [
+    "amd",
+    "npm",
+    "commonjs"
+  ],
+  "keywords": [
+    "strings"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine": "~2.0.0",
+    "requirejs": "~2.1.11"
+  }
+}

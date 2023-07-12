@@ -22,9 +22,11 @@ export default class HeaderTabs {
         link.appendChild(text)
     }
 
+    ClearTabs() { self.elements.lua_sessions.innerHTML = "" }
+
     async Update() {
         const instances: Array<string> = await self.luaEngine.getInstances()
-        self.elements.lua_sessions.innerHTML = ""
+        this.ClearTabs()
         this.CreateTab("Home", location.pathname)
 
         if (!instances) return self.errorHandler.Error({ message: "Unable to get session instances." })

@@ -1,0 +1,14 @@
+{
+    "name": "string",
+    "main": "string.js",
+    "version": "0.2.0",
+    "homepage": "https://github.com/gfarrell/string.js",
+    "authors": [
+        "Gideon Farrell <me@gideonfarrell.co.uk>"
+    ],
+    "description": "Useful String extensions in javascript",
+    "keywords": [
+        "strings"
+    ],
+    "license": "MIT"
+}

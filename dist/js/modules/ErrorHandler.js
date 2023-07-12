@@ -1,9 +1,9 @@
 import * as self from "../index";
 export default class ErrorHandler {
     constructor() { }
-    Error(error) {
+    Error(error, resetUrl = false) {
         alert(error.message);
         self.editor.ToggleLoading(false);
-        self.luaEngine.resetUrl();
+        resetUrl && self.luaEngine.resetUrl();
     }
 }

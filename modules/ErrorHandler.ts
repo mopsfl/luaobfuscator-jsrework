@@ -5,10 +5,10 @@ export default class ErrorHandler {
     constructor(
     ) { }
 
-    Error(error: Error) {
+    Error(error: Error, resetUrl: boolean = false) {
         alert(error.message)
         self.editor.ToggleLoading(false)
-        self.luaEngine.resetUrl()
+        resetUrl && self.luaEngine.resetUrl()
     }
 }
 

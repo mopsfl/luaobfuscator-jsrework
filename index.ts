@@ -38,8 +38,8 @@ window.onload = async () => {
         buttons.ToggleDropdown(btns_div, e.target)
     })
 
-    $(".toolbox-button").on("click", (e) => {
-        if (!window.states.isObfuscating) luaEngine.Obfuscate(e.target.id.replace(new RegExp(/lua.*\W/gm), ""), 1, editor.Callback)
+    $(".toolbox-button").on("click", async (e) => {
+        if (!window.states.isObfuscating) await luaEngine.Obfuscate(e.target.id.replace(new RegExp(/lua.*\W/gm), ""), 1, editor.Callback)
     })
 
     luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1)

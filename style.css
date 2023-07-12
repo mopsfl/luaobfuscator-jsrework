@@ -520,6 +520,12 @@ pre>span {
     margin-bottom: 10px;
 }
 
+.ctoken:focus-visible {
+    outline: solid 2px rgb(2, 120, 189);
+    border-radius: 3px;
+    padding: 5px;
+}
+
 .top-crumb {
     display: inline-block;
     height: 100%;
@@ -1219,6 +1225,10 @@ body {
 
 .toolbox-button {
     user-select: none;
+}
+
+.toolbox-button.disabled {
+    filter: grayscale(100%);
 }
 
 @media only screen and (min-width:600px) {

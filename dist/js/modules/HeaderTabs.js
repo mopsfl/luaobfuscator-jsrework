@@ -16,9 +16,10 @@ export default class HeaderTabs {
         listItem.appendChild(tab);
         link.appendChild(text);
     }
+    ClearTabs() { self.elements.lua_sessions.innerHTML = ""; }
     async Update() {
         const instances = await self.luaEngine.getInstances();
-        self.elements.lua_sessions.innerHTML = "";
+        this.ClearTabs();
         this.CreateTab("Home", location.pathname);
         if (!instances)
             return self.errorHandler.Error({ message: "Unable to get session instances." });
