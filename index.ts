@@ -18,6 +18,7 @@ window.onload = async () => {
     window.states = {
         isObfuscating: false,
         windowState: false,
+        isLoading: false,
     }
 
     $(elements.btn_demo).on("click", () => buttons.OpenDemo())
@@ -31,6 +32,16 @@ window.onload = async () => {
         files[0].text().then(script => luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1, true, script))
     })
 
+    $(".toolbox-collapsible").on("click", (e) => {
+        const btns_div: any = e.target.nextElementSibling
+        if (_.isNil(btns_div)) return
+        buttons.ToggleDropdown(btns_div, e.target)
+    })
+
+    $(".toolbox-button").on("click", (e) => {
+        if (!window.states.isObfuscating) luaEngine.Obfuscate(e.target.id.replace(new RegExp(/lua.*\W/gm), ""), 1, editor.Callback)
+    })
+
     luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1)
     await headerTabs.Update()
 }
@@ -41,6 +52,7 @@ declare global {
         states: {
             isObfuscating: boolean,
             windowState: boolean,
+            isLoading: boolean
         },
         modules: {}
     }

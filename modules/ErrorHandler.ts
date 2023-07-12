@@ -7,6 +7,8 @@ export default class ErrorHandler {
 
     Error(error: Error) {
         alert(error.message)
+        self.editor.ToggleLoading(false)
+        self.luaEngine.resetUrl()
     }
 }
 

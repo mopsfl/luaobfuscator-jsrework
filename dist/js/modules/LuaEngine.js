@@ -47,6 +47,7 @@ export default class LuaEngine {
         this.callback = callback;
         this.getSessionUrl();
         if (this.sessionId !== null) {
+            self.editor.ToggleLoading();
             this.getScript((eventCode) => {
                 if (eventCode === null)
                     return this.resetUrl();
@@ -54,10 +55,12 @@ export default class LuaEngine {
             });
         }
         else if (force) {
+            self.editor.ToggleLoading();
             this.initScript(false, flags, content);
         }
     }
     initFromUrl(callback) {
+        self.editor.ToggleLoading();
         const url = new URL(window.location.href);
         self.$.getJSON(url.searchParams.get("file"), (data) => {
             this.tokens = data;
@@ -67,11 +70,7 @@ export default class LuaEngine {
     getSessionId() { return this.sessionId; }
     getSessionUrl() {
         this.sessionId = new URLSearchParams(window.location.search).get("session");
-        //this.setFakeUrl()
         return this.sessionId;
-    }
-    setFakeUrl(url = "") {
-        window.history.replaceState({}, document.title, `/${url}`);
     }
     setSessionUrl() {
         const url = new URLSearchParams(window.location.search);
@@ -84,15 +83,22 @@ export default class LuaEngine {
         url.delete("session");
         window.location.search = _.toString(url);
     }
-    getScript(callback) {
-        self.$.ajax({
-            url: `${this.apiUrl}${this.endpoints.session}${this.sessionId}`
+    async getScript(callback) {
+        await self.$.ajax({
+            url: `${this.apiUrl}${this.endpoints.session}${this.sessionId}`,
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Error while requesting script.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+                this.resetUrl();
+            },
         }).then(res => {
             const script = res;
             this.tokens = script.tokens;
             if (!_.isNull(script.message)) {
-                if (!_.isNull(script.message))
+                if (!_.isNull(script.message)) {
                     self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
+                    self.editor.ToggleLoading(false);
+                }
                 if (_.isFunction(callback))
                     callback(-1);
                 return;
@@ -105,29 +111,33 @@ export default class LuaEngine {
             }
             else
                 callback(null);
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
         });
+        self.editor.ToggleLoading();
     }
-    initScript(reset, flag = 0, content = "") {
-        self.$.ajax({
+    async initScript(reset, flag = 0, content = "") {
+        await self.$.ajax({
             url: `${this.apiUrl}${this.endpoints.initf}${flag}`,
             method: "POST",
-            data: content
+            data: content,
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Error while initializing script.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+            },
         }).then(res => {
             const script = res;
             this.sessionId = script.sessionId;
             if (!reset)
                 this.setSessionUrl();
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
         });
+        self.editor.ToggleLoading();
     }
-    resetScript(flag = 0) { this.initScript(true, flag); }
-    updateLastTick() { this.lastApiTry = misc.getTick(); }
-    updateScript(script, callback) {
+    resetScript(flag = 0) {
+        this.initScript(true, flag);
+    }
+    updateLastTick() {
+        this.lastApiTry = misc.getTick();
+    }
+    async updateScript(script, callback) {
         let tick = misc.getTick();
         if (this.lastApiTry + 2000 > tick) {
             this.lastApiTry = tick;
@@ -155,43 +165,55 @@ export default class LuaEngine {
         this.lastEvent = tick;
         this.lastApiTry = tick;
         console.log(`new event: ${tick}`);
-        self.$.ajax({
+        await self.$.ajax({
             url: this.apiUrl,
             method: "POST",
             data: script,
             headers: {
                 "sessionId": this.sessionId
-            }
+            },
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Error while updating script.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+            },
         }).then(res => {
             const script = res;
             this.tokens = script.tokens;
-            if (!_.isNull(script.message))
+            if (!_.isNull(script.message)) {
                 self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
+            }
             if (_.isFunction(callback))
                 callback(tick);
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
         });
+        self.editor.ToggleLoading(false);
     }
-    Obfuscate(option, percent, callback) {
-        self.$.ajax({
-            url: `${this.apiUrl}/${this.endpoints.obfuscateAll}/${option}/${percent}`,
+    async Obfuscate(option, percent, callback) {
+        self.editor.StartObfuscation();
+        await self.$.ajax({
+            url: `${this.apiUrl}${this.endpoints.obfuscateAll}${option}/${percent}`,
             method: "POST",
             headers: {
                 "sessionId": this.sessionId
-            }
+            },
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Error while obfuscating script.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+                self.editor.StopObfuscation();
+            },
         }).then(res => {
             const script = res;
             this.tokens = script.tokens;
-            if (!_.isNull(script.message))
+            if (!_.isNull(script.message)) {
                 self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
+                self.editor.ToggleLoading(false);
+            }
             if (_.isFunction(callback))
                 callback(-1);
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
+        }).done(() => {
+            console.log("obfuscation done");
         });
+        self.editor.StopObfuscation();
+        self.editor.ToggleLoading(false);
     }
     obfuscateToken(tokenId, callback) {
         self.$.ajax({
@@ -199,7 +221,11 @@ export default class LuaEngine {
             method: "POST",
             headers: {
                 "sessionId": this.sessionId
-            }
+            },
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Error while obfuscating script.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+            },
         }).then(res => {
             const script = res;
             this.tokens = script.tokens;
@@ -207,20 +233,18 @@ export default class LuaEngine {
                 self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
             if (_.isFunction(callback))
                 callback(-1);
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
         });
     }
     async getInstances() {
         await self.$.ajax({
             url: `${this.apiUrl}${this.endpoints.sessions}`,
-            method: "GET"
+            method: "GET",
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Unable to get instances.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+            },
         }).then(res => {
             this.instances = res;
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
         });
         return this.instances;
     }
@@ -230,17 +254,20 @@ export default class LuaEngine {
             method: "POST",
             headers: {
                 "sessionId": this.sessionId
-            }
+            },
+            error: (err) => {
+                const error = err;
+                self.errorHandler.Error({ ajaxError: error, message: `Error while cleaning up script.\nRequest state: ${error.state()}\nStatus code: ${error.status} (${error.statusText})` });
+            },
         }).then(res => {
             const script = res;
             this.tokens = script.tokens;
-            if (!_.isNull(script.message))
+            if (!_.isNull(script.message)) {
                 self.errorHandler.Error({ message: script.message, misc: { sessionId: script.sessionId } });
+                self.editor.ToggleLoading(false);
+            }
             if (_.isFunction(callback))
                 callback(-1);
-        }).catch(err => {
-            const error = err;
-            console.error(`Error: ${error.statusText} (${error.status})`);
         });
     }
     onVariableChange(event) {
@@ -324,6 +351,7 @@ export default class LuaEngine {
                         newSpan.className = addNoteClass;
                     }
                     newSpan.className = addNoteClass;
+                    newSpan.classList.add("ctoken");
                     newSpan.appendChild(document.createTextNode(token.value));
                     newSpan.id = "token-" + i;
                     targetElement.append(newSpan);
@@ -332,5 +360,5 @@ export default class LuaEngine {
         }
         return true;
     }
-    getLines() { this.lines = self.$("<ul>"); }
+    getLines() { this.lines = self.$(".ctoken"); return this.lines; }
 }

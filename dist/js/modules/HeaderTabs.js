@@ -19,7 +19,9 @@ export default class HeaderTabs {
     async Update() {
         const instances = await self.luaEngine.getInstances();
         self.elements.lua_sessions.innerHTML = "";
-        this.CreateTab("Home");
+        this.CreateTab("Home", location.pathname);
+        if (!instances)
+            return self.errorHandler.Error({ message: "Unable to get session instances." });
         instances.forEach(s => {
             this.CreateTab(s, `./${self.luaEngine.endpoints.session}${s}`);
         });

@@ -1,11 +1,11 @@
 import * as self from "../index"
 
 export default class Buttons {
-    OpenDemo() {
-        if (!window.states.isObfuscating) self.luaEngine.init(() => { }, 1, true)
-    }
+    OpenDemo() { if (!window.states.isObfuscating) self.luaEngine.init(() => { }, 1, true) }
+    UploadFile() { self.$(self.elements.lua_file).trigger("click") }
 
-    UploadFile() {
-        self.$(self.elements.lua_file).trigger("click")
+    ToggleDropdown(btns_div: HTMLElement, toolboxbtn: HTMLElement) {
+        toolboxbtn?.classList.toggle("toolbox-hit")
+        btns_div.style.display = btns_div.style.display == "none" ? "block" : "none"
     }
 }

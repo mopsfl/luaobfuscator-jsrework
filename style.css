@@ -19,6 +19,10 @@
     --smogSize: 120px
 }
 
+* {
+    scrollbar-width: thin;
+}
+
 html {
     height: 100%;
     width: 100%;
@@ -499,6 +503,7 @@ pre>span {
     max-width: 200px;
     text-overflow: ellipsis;
     white-space: nowrap;
+    user-select: none;
 }
 
 .top-tab>a {
@@ -508,6 +513,11 @@ pre>span {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+#lua-codewindow {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .top-crumb {
@@ -527,6 +537,7 @@ pre>span {
     float: right;
     color: #cd5c5c;
     cursor: pointer;
+    user-select: none;
 }
 
 .toolbox-collapsible {
@@ -539,7 +550,8 @@ pre>span {
     border: none;
     text-align: center;
     outline: none;
-    font-size: 18px
+    font-size: 18px;
+    user-select: none;
 }
 
 .toolbox-collapsible:hover {
@@ -751,6 +763,10 @@ body {
 .toolbox-stats {
     color: #90ee90 !important;
     margin-top: 75px
+}
+
+.toolbox-stats>* {
+    pointer-events: none;
 }
 
 .notepad-test {
@@ -1201,9 +1217,23 @@ body {
     height: var(--fireSize)
 }
 
+.toolbox-button {
+    user-select: none;
+}
+
+@media only screen and (min-width:600px) {
+    #home-ide {
+        max-height: 100% !important;
+    }
+}
+
 @media only screen and (max-width:600px) {
     .home-ribbon {
         display: none
+    }
+
+    #home-ide {
+        max-height: 70% !important;
     }
 
     .btn-desktop {
@@ -1265,7 +1295,7 @@ body {
 
     .toolbox-button {
         font-size: 18px;
-        line-height: 1.2
+        line-height: 1.2;
     }
 
     #toolbox-download-btn {
