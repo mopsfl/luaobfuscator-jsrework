@@ -14,4 +14,4 @@
 here are 2 good addons:
   
 - Chrome / Edge: <a href="https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino?hl=de">CORS Unblock</a>
-- Firefox:<a href="https://addons.mozilla.org/de/firefox/addon/cross-domain-cors/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search">Cross Domain - CORS</a>
+- Firefox: <a href="https://addons.mozilla.org/de/firefox/addon/cross-domain-cors/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search">Cross Domain - CORS</a>
