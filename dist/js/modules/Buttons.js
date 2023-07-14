@@ -7,4 +7,16 @@ export default class Buttons {
         toolboxbtn?.classList.toggle("toolbox-hit");
         btns_div.style.display = btns_div.style.display == "none" ? "block" : "none";
     }
+    AcceptCookies() {
+        self.elements.cookie_popup.style.display = "none";
+        self.cookie_js.set({ "cookie_consent": "yes" }, {
+            expires: 365
+        });
+    }
+    RejectCookies() {
+        self.elements.cookie_popup.style.display = "none";
+        self.cookie_js.set({ "cookie_consent": "no" }, {
+            expires: 1
+        });
+    }
 }

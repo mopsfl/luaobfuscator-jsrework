@@ -7,6 +7,7 @@
       "paths": {
         "lodash": ["/static/js/lodash.min.js"],
         "jquery": ["/bower_components/jquery/dist/jquery.min.js"],
+        "colorlog": ["/static/js/color-log.js"]
       }
     },
     "compileOnSave": true,

@@ -8,6 +8,9 @@ export default class Elements {
         public toolbox: HTMLElement = document.querySelector("#notepad-toolbox1"),
         public btn_uploadfile: HTMLElement = document.querySelector("#btn-uploadfile"),
         public lua_file: HTMLElement = document.querySelector("#lua-file"),
-        public lua_sessions: HTMLElement = document.querySelector("#lua-sessions")
+        public lua_sessions: HTMLElement = document.querySelector("#lua-sessions"),
+        public cookie_popup: HTMLElement = document.querySelector(".cookie-popup"),
+        public cookie_reject_btn: HTMLElement = document.querySelector("#cookie-reject-btn"),
+        public cookie_accept_btn: HTMLElement = document.querySelector("#cookie-accept-btn"),
     ) { }
 }
