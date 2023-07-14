@@ -1168,6 +1168,27 @@ body {
     color: gray
 }
 
+.cookie-popup {
+    position: fixed;
+    background: var(--color-hover);
+    z-index: 999;
+    bottom: 0px;
+    width: max-content;
+    left: 0px;
+    margin: 15px;
+    padding: 12px;
+    max-width: 380px;
+    box-shadow: black 5px 5px 6px 0px;
+    display: none;
+    border-radius: 3px;
+}
+
+.cookie-popup>h2 {
+    text-align: center;
+    border-bottom: solid 2px var(--primary);
+    padding-bottom: 5px;
+}
+
 @keyframes fly-away {
     0% {
         opacity: 1;

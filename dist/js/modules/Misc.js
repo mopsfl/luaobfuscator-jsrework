@@ -1,4 +1,4 @@
-export default class misc {
+export default class Misc {
     randomHex(num, max) {
         var hue = Math.floor(360 * num / max);
         return "#" + this.hslToHex(hue, 100, 50);
@@ -56,5 +56,12 @@ export default class misc {
         return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
             return index === 0 ? word.toLowerCase() : word.toUpperCase();
         }).replace(/\s+/g, '');
+    }
+    formatBytes(bytes, decimals = 2) {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        if (!+bytes)
+            return `0 ${sizes[0]}`;
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${sizes[i]}`;
     }
 }

@@ -283,7 +283,6 @@ export default class LuaEngine {
         }
     }
 
-
     parseScript(targetElement: HTMLElement | Element, tick: number): boolean | undefined {
         console.log(`finish event: ${tick}`)
         if (!this.tokens || this.tokens.length == 0 || (tick != -1 && (tick != this.lastEvent || tick != this.lastApiTry))) return

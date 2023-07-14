@@ -9,6 +9,7 @@ import HeaderTabs from "./modules/HeaderTabs"
 import cookie_js from 'cookie_js';
 import * as _ from "lodash"
 import $ from "jquery"
+import Misc from "./modules/Misc"
 
 const elements = new Elements()
 const buttons = new Buttons()
@@ -16,6 +17,8 @@ const editor = new Editor()
 const luaEngine = new LuaEngine()
 const errorHandler = new ErrorHandler()
 const headerTabs = new HeaderTabs()
+const misc = new Misc()
+
 $(async (e) => {
     // - VARIABLES - \\
 
@@ -24,6 +27,7 @@ $(async (e) => {
         windowState: false,
         isLoading: false,
     }
+
     window.info = {
         init_time: NaN,
         packages: [
@@ -53,6 +57,7 @@ $(async (e) => {
         if (window.states.isObfuscating && files.length > 0) return
 
         window.states.isObfuscating = true
+        if (files[0].size > 4194304) return alert(`Sorry, but your script is too large! (${misc.formatBytes(files[0].size)}/${misc.formatBytes(4194304)})`)
         files[0].text().then(script => luaEngine.init((lastEvent: number) => { editor.Callback(lastEvent) }, 1, true, script))
     })
 
@@ -75,7 +80,8 @@ $(async (e) => {
         "color: #ffffff; background: #535353; padding: 5px; line-height: 20px",
         "color: white; background: #848484; padding: 5px; line-height: 20px",
         "color: #ffffff; background: #535353; padding: 5px; line-height: 20px",
-        "color: #89D718; background: #535353; padding: 5px; line-height: 20px"]);
+        "color: #89D718; background: #535353; padding: 5px; line-height: 20px"
+    ]);
 })
 
 
@@ -95,8 +101,8 @@ declare global {
 }
 
 window.modules = {
-    classes: { Elements, Buttons, Editor, LuaEngine, ErrorHandler, HeaderTabs },
-    initalized: { elements, buttons, editor, luaEngine, errorHandler, headerTabs, lodash: _, jquery: $, cookie_js }
+    classes: { Elements, Buttons, Editor, LuaEngine, ErrorHandler, HeaderTabs, Misc },
+    initalized: { elements, buttons, editor, luaEngine, errorHandler, headerTabs, lodash: _, jquery: $, cookie_js, misc }
 }
 
 export {
@@ -106,5 +112,6 @@ export {
     luaEngine,
     errorHandler,
     headerTabs,
+    misc,
     $, _, cookie_js
 }
