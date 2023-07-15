@@ -74,7 +74,7 @@ $(async (e) => {
     // - MISC - \\
 
     window.info.init_time = new Date().getTime() - start_tick
-    let c_str = `%cpage took%c${window.info.init_time}ms%cto initalize. \n\n packages:%c\n`
+    let c_str = `%cpage took%c${window.info.init_time}ms%cto initalize. \n\n modules:%c\n`
     window.info.packages.forEach(p => c_str += `    - ${Object.keys(p)[0]}: ${Object.values(p)[0]} \n`)
     console.log(`${c_str}`, ...[
         "color: #ffffff; background: #535353; padding: 5px; line-height: 20px",
@@ -82,6 +82,7 @@ $(async (e) => {
         "color: #ffffff; background: #535353; padding: 5px; line-height: 20px",
         "color: #89D718; background: #535353; padding: 5px; line-height: 20px"
     ]);
+
 })
 
 
@@ -96,7 +97,10 @@ declare global {
             init_time: number,
             packages: Array<{}>
         },
-        modules: {}
+        modules: {
+            classes: {},
+            initalized: {}
+        }
     }
 }
 
